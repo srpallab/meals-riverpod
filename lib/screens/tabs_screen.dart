@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:meals_riverpod/widgets/meals_drawer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals_riverpod/core/providers/favorites_provider.dart';
 
+import '../core/providers/meals_provider.dart';
+import '../widgets/meals_drawer.dart';
 import 'categories_screen.dart';
 import 'meals_screen.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -26,9 +29,12 @@ class _TabsScreenState extends State<TabsScreen> {
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
-      activePage = const MealsScreen(meals: []);
+      final favoriteMeals = ref.watch(favoriteMealsProvider);
+      activePage = MealsScreen(meals: favoriteMeals);
       activePageTitle = 'Your Favorites';
     }
+
+    ref.watch(mealsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(activePageTitle)),

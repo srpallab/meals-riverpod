@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meals_riverpod/screens/filters_screen.dart';
+
+import '../screens/filters_screen.dart';
 
 class MealsDrawer extends StatefulWidget {
   const MealsDrawer({super.key});
@@ -60,6 +61,7 @@ class _MealsDrawerState extends State<MealsDrawer> {
                   ),
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (ctx) => const FiltersScreen()),
               );

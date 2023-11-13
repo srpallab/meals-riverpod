@@ -1,43 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FiltersScreen extends StatefulWidget {
+import '../core/providers/filters_provider.dart';
+
+class FiltersScreen extends ConsumerWidget {
   const FiltersScreen({super.key});
 
   @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activeFilters = ref.watch(filterProvider);
 
-class _FiltersScreenState extends State<FiltersScreen> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Filters"),
       ),
       body: Column(
         children: [
-          SwitchListTile(
-            value: true,
-            onChanged: (isChecked) {
-              setState(() {});
+          filterSwitchSection(
+            context,
+            'Gluten-free',
+            'Only include gluten-free meals.',
+            (isChecked) {
+              ref
+                  .read(filterProvider.notifier)
+                  .setFilter(Filter.glutenFree, isChecked);
             },
-            title: Text(
-              'Gluten-free',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only include gluten-free meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 34, right: 22),
+            activeFilters[Filter.glutenFree]!,
+          ),
+          filterSwitchSection(
+            context,
+            'Lactose-free',
+            'Only include lactose-free meals',
+            (isChecked) {
+              ref
+                  .read(filterProvider.notifier)
+                  .setFilter(Filter.lactoseFree, isChecked);
+            },
+            activeFilters[Filter.lactoseFree]!,
+          ),
+          filterSwitchSection(
+            context,
+            'Vegetarian',
+            'Only include vegetarian meals.',
+            (isChecked) {
+              ref
+                  .read(filterProvider.notifier)
+                  .setFilter(Filter.vegetarian, isChecked);
+            },
+            activeFilters[Filter.vegetarian]!,
+          ),
+          filterSwitchSection(
+            context,
+            'Vegan',
+            'Only include vegan meals.',
+            (isChecked) {
+              ref
+                  .read(filterProvider.notifier)
+                  .setFilter(Filter.vegan, isChecked);
+            },
+            activeFilters[Filter.vegan]!,
           ),
         ],
       ),
+    );
+  }
+
+  SwitchListTile filterSwitchSection(
+    BuildContext context,
+    String title,
+    String subTitle,
+    void Function(bool)? onChanged,
+    bool value,
+  ) {
+    return SwitchListTile(
+      value: value,
+      onChanged: onChanged,
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+      ),
+      subtitle: Text(
+        subTitle,
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+      ),
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      contentPadding: const EdgeInsets.only(left: 34, right: 22),
     );
   }
 }

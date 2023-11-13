@@ -16,6 +16,7 @@ dependencies:
   # The following adds the Fonts
   google_fonts: ^6.1.0
   transparent_image: ^2.0.1
+  flutter_riverpod: ^2.4.5
 
 dev_dependencies:
   flutter_test:
